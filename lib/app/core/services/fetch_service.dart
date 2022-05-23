@@ -9,7 +9,11 @@ class DioFetchService implements IFetchService {
 
   @override
   Future<dynamic>? fetchGet(String? url) async {
-    final response = await dio.get(url!);
-    return response;
+    try {
+      final response = await dio.get(url!);
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }
