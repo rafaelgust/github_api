@@ -10,11 +10,6 @@ class DioFetchService implements IFetchService {
   @override
   Future<dynamic>? fetchGet(String? url) async {
     final response = await dio.get(url!);
-    var result = response;
-    if (response.statusCode == 200) {
-      return result;
-    } else {
-      return null;
-    }
+    return response;
   }
 }
