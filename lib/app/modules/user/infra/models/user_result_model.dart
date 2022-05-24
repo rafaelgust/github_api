@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import '../../domain/entities/user_result.dart';
 
 class UserResultModel extends UserResult {
@@ -21,50 +19,41 @@ class UserResultModel extends UserResult {
     required super.updatedAt,
   });
 
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'login': login,
-      'id': id,
-      'node_id': nodeId,
-      'name': name,
-      'email': email,
-      'company': company,
-      'avatar_url': avatarUrl,
-      'bio': bio,
-      'location': location,
-      'public_repos': publicRepos,
-      'public_gists': publicGists,
-      'followers': followers,
-      'following': following,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-    };
+  UserResultModel.fromJson(Map<String, dynamic> json) {
+    login = json['login'];
+    id = json['id'];
+    nodeId = json['node_id'];
+    avatarUrl = json['avatar_url'];
+    name = json['name'];
+    company = json['company'];
+    location = json['location'];
+    email = json['email'];
+    bio = json['bio'];
+    publicRepos = json['public_repos'];
+    publicGists = json['public_gists'];
+    followers = json['followers'];
+    following = json['following'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
   }
 
-  factory UserResultModel.fromMap(Map<String, dynamic> map) {
-    return UserResultModel(
-      login: map['login'] != null ? map['login'] as String : '',
-      id: map['id'] != null ? map['id'] as int : null,
-      nodeId: map['node_id'] != null ? map['node_id'] as String : '',
-      name: map['name'] != null ? map['name'] as String : '',
-      email: map['email'] != null ? map['email'] as String : '',
-      company: map['company'] != null ? map['company'] as String : '',
-      avatarUrl: map['avatar_url'] != null ? map['avatar_url'] as String : '',
-      bio: map['bio'] != null ? map['bio'] as String : '',
-      location: map['location'] != null ? map['location'] as String : '',
-      publicRepos:
-          map['public_repos'] != null ? map['public_repos'] as int : null,
-      publicGists:
-          map['public_gists'] != null ? map['public_gists'] as int : null,
-      followers: map['followers'] != null ? map['followers'] as int : null,
-      following: map['following'] != null ? map['following'] as int : null,
-      createdAt: map['created_at'] != null ? map['created_at'] as String : '',
-      updatedAt: map['updated_at'] != null ? map['updated_at'] as String : '',
-    );
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['login'] = login;
+    data['id'] = id;
+    data['node_id'] = nodeId;
+    data['avatar_url'] = avatarUrl;
+    data['name'] = name;
+    data['company'] = company;
+    data['location'] = location;
+    data['email'] = email;
+    data['bio'] = bio;
+    data['public_repos'] = publicRepos;
+    data['public_gists'] = publicGists;
+    data['followers'] = followers;
+    data['following'] = following;
+    data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    return data;
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory UserResultModel.fromJson(String source) =>
-      UserResultModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }
