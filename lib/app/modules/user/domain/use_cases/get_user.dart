@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 
-import '../entities/user.dart';
+import '../entities/user_result.dart';
 import '../exceptions/user_exceptions.dart';
 import '../repositories/user_repository.dart';
 
 abstract class IGetUserData {
-  Future<Either<UserErros, User>>? call(String username);
+  Future<Either<UserErros, UserResult>>? call(String username);
 }
 
 class GetUserData implements IGetUserData {
@@ -13,11 +13,11 @@ class GetUserData implements IGetUserData {
 
   GetUserData(this.repository);
   @override
-  Future<Either<UserErros, User>>? call(String username) async {
+  Future<Either<UserErros, UserResult>>? call(String username) async {
     if (username.isEmpty) {
       return Left(InvalidUserError());
     }
-    final result = repository.getUser(username)!;
+    final result = await repository.getUser(username)!;
     return result;
   }
 }
