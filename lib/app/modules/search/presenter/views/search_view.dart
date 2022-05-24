@@ -71,14 +71,18 @@ class _SearchViewState extends State<SearchView> {
                   final list = (bloc.state as SearchSucessState).list;
                   return ListView.builder(
                     itemCount: list?.length,
-                    itemBuilder: ((context, index) => ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage('${list?[index].img}'),
+                    itemBuilder: ((context, index) => InkWell(
+                          onTap: () => Modular.to
+                              .pushNamed('/user/${list?[index].username}'),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage('${list?[index].img}'),
+                            ),
+                            title: Text(
+                                '${list?[index].username} - ${list?[index].id}'),
+                            subtitle: Text('${list?[index].url}'),
                           ),
-                          title: Text(
-                              '${list?[index].username} - ${list?[index].id}'),
-                          subtitle: Text('${list?[index].url}'),
                         )),
                   );
                 }),
