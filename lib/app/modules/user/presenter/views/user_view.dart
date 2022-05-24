@@ -4,6 +4,8 @@ import 'package:github_api/app/modules/user/presenter/bloc/events/user_events.da
 
 import '../bloc/states/user_states.dart';
 import '../bloc/user_bloc.dart';
+import '../components/user_header.dart';
+import '../components/user_header_loading.dart';
 
 class UserView extends StatefulWidget {
   final String user;
@@ -26,29 +28,57 @@ class _UserViewState extends State<UserView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.user),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        leading: IconButton(
+          onPressed: () => Modular.to.pop(),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.black,
+          ),
+        ),
       ),
-      body: StreamBuilder(
-          stream: bloc.stream,
-          builder: (context, snapshot) {
-            if (bloc.state is UserInitialState) {
-              return const Center(
-                child: Text('Procure um usuario'),
-              );
-            }
-            if (bloc.state is UserErrorState) {
-              return const Center(
-                child: Text('Campo vazio'),
-              );
-            }
-            if (bloc.state is UserLoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            final user = (bloc.state as UserSucessState).list;
-            return Text('${user?.name}');
-          }),
+      extendBodyBehindAppBar: true,
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            StreamBuilder(
+                stream: bloc.stream,
+                builder: (context, snapshot) {
+                  if (bloc.state is UserInitialState) {
+                    return const Center(
+                      child: Text('Procure um usuario'),
+                    );
+                  }
+                  if (bloc.state is UserErrorState) {
+                    return const Center(
+                      child: Text('Campo vazio'),
+                    );
+                  }
+                  if (bloc.state is UserLoadingState) {
+                    return const UserHeaderLoading();
+                  }
+                  final user = (bloc.state as UserSucessState).list;
+                  return UserHeader(
+                    avatar: '${user?.avatarUrl}',
+                    username: '${user?.login}',
+                    name: '${user?.name}',
+                    email: '${user?.email}',
+                    company: '${user?.company}',
+                    location: '${user?.location}',
+                    bio: '${user?.bio}',
+                    followers: user?.followers,
+                    following: user?.following,
+                    repos: user?.publicRepos,
+                    gists: user?.publicGists,
+                  );
+                }),
+            const Divider(),
+          ],
+        ),
+      ),
     );
   }
 }

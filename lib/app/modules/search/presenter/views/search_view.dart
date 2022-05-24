@@ -27,67 +27,73 @@ class _SearchViewState extends State<SearchView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search Page'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Modular.to.pop(),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.black,
+          ),
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              onChanged: (value) => _debounce(() {
-                bloc.add(SearchInputEvent(value));
-              }),
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Search',
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (value) => _debounce(() {
+                  bloc.add(SearchInputEvent(value));
+                }),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Search',
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: StreamBuilder(
-                stream: bloc.stream,
-                builder: (context, snapshot) {
-                  if (bloc.state is SearchInitialState) {
-                    return const Center(
-                      child: Text('Procure um usuario'),
-                    );
-                  }
-                  if (bloc.state is SearchErrorState) {
-                    return const Center(
-                      child: Text('Campo vazio'),
-                    );
-                  }
-                  if (bloc.state is SearchLoadingState) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  final list = (bloc.state as SearchSucessState).list;
-                  return ListView.builder(
-                    itemCount: list?.length,
-                    itemBuilder: ((context, index) => InkWell(
-                          onTap: () => Modular.to
-                              .pushNamed('/user/${list?[index].username}'),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage('${list?[index].img}'),
+            Expanded(
+              child: StreamBuilder(
+                  stream: bloc.stream,
+                  builder: (context, snapshot) {
+                    if (bloc.state is SearchInitialState) {
+                      return const Center(
+                        child: Text('Procure um usuario'),
+                      );
+                    }
+                    if (bloc.state is SearchErrorState) {
+                      return const Center(
+                        child: Text('Campo vazio'),
+                      );
+                    }
+                    if (bloc.state is SearchLoadingState) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    final list = (bloc.state as SearchSucessState).list;
+                    return ListView.builder(
+                      itemCount: list?.length,
+                      itemBuilder: ((context, index) => InkWell(
+                            onTap: () => Modular.to
+                                .pushNamed('/user/${list?[index].username}'),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage('${list?[index].img}'),
+                              ),
+                              title: Text(
+                                  '${list?[index].username} - ${list?[index].id}'),
+                              subtitle: Text('${list?[index].url}'),
                             ),
-                            title: Text(
-                                '${list?[index].username} - ${list?[index].id}'),
-                            subtitle: Text('${list?[index].url}'),
-                          ),
-                        )),
-                  );
-                }),
-          ),
-        ],
+                          )),
+                    );
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }
