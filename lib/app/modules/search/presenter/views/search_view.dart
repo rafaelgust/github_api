@@ -80,9 +80,12 @@ class _SearchViewState extends State<SearchView> {
                             onTap: () => Modular.to
                                 .pushNamed('/user/${list?[index].username}'),
                             child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage('${list?[index].img}'),
+                              leading: Hero(
+                                tag: 'avatar@${list?[index].username}',
+                                child: CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage('${list?[index].img}'),
+                                ),
                               ),
                               title: Text(
                                   '${list?[index].username} - ${list?[index].id}'),

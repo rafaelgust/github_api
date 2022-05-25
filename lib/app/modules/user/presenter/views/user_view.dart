@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:github_api/app/modules/user/presenter/bloc/events/user_events.dart';
+import 'package:github_api/app/modules/user/presenter/bloc/events/repos_events.dart';
 
+import '../bloc/events/user_events.dart';
+import '../bloc/repos_bloc.dart';
+import '../bloc/states/repos_states.dart';
 import '../bloc/states/user_states.dart';
 import '../bloc/user_bloc.dart';
 import '../components/user_header.dart';
@@ -17,11 +20,13 @@ class UserView extends StatefulWidget {
 
 class _UserViewState extends State<UserView> {
   final bloc = Modular.get<UserViewBloc>();
+  final blocRepos = Modular.get<ReposListBloc>();
 
   @override
   void initState() {
     super.initState();
     bloc.add(GetUserEvent(widget.user));
+    blocRepos.add(GetReposEvent(widget.user));
   }
 
   @override
@@ -49,18 +54,18 @@ class _UserViewState extends State<UserView> {
                 builder: (context, snapshot) {
                   if (bloc.state is UserInitialState) {
                     return const Center(
-                      child: Text('Procure um usuario'),
+                      child: Text('Initial'),
                     );
                   }
                   if (bloc.state is UserErrorState) {
                     return const Center(
-                      child: Text('Campo vazio'),
+                      child: Text('Error'),
                     );
                   }
                   if (bloc.state is UserLoadingState) {
                     return const UserHeaderLoading();
                   }
-                  final user = (bloc.state as UserSucessState).list;
+                  final user = (bloc.state as UserSucessState).data;
                   return UserHeader(
                     avatar: '${user?.avatarUrl}',
                     username: '${user?.login}',
@@ -76,6 +81,32 @@ class _UserViewState extends State<UserView> {
                   );
                 }),
             const Divider(),
+            StreamBuilder(
+                stream: blocRepos.stream,
+                builder: (context, snapshot) {
+                  if (blocRepos.state is ReposInitialState) {
+                    return const Center(
+                      child: Text('initial'),
+                    );
+                  }
+                  if (blocRepos.state is ReposErrorState) {
+                    return const Center(
+                      child: Text('Error'),
+                    );
+                  }
+                  if (blocRepos.state is ReposLoadingState) {
+                    return const Center(
+                      child: Text('Load'),
+                    );
+                  }
+                  final list = (blocRepos.state as ReposSucessState).list;
+                  return ListView.builder(
+                    itemCount: list?.length,
+                    itemBuilder: (context, index) {
+                      return Text('${list?[index].name}');
+                    },
+                  );
+                }),
           ],
         ),
       ),

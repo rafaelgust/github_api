@@ -8,9 +8,9 @@ class UserInitialState implements UserStates {}
 class UserLoadingState implements UserStates {}
 
 class UserSucessState implements UserStates {
-  final UserResult? list;
+  final UserResult? data;
 
-  UserSucessState(this.list);
+  UserSucessState(this.data);
 }
 
 class UserErrorState implements UserStates {

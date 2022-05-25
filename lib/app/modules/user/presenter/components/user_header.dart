@@ -28,15 +28,31 @@ class UserHeader extends StatelessWidget {
           width: 200,
           height: 200,
           margin: const EdgeInsets.only(bottom: 10.0),
-          child: CircleAvatar(
-            radius: 30.0,
-            backgroundImage: NetworkImage(avatar),
-            backgroundColor: Colors.transparent,
+          child: Hero(
+            tag: 'avatar@$username',
+            child: CircleAvatar(
+              radius: 30.0,
+              backgroundImage: NetworkImage(avatar),
+              backgroundColor: Colors.transparent,
+            ),
           ),
         ),
-        Text('@$username'),
-        Text(name),
-        Text(bio),
+        Text(
+          name,
+          style: const TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          '@$username',
+          style: const TextStyle(
+            fontSize: 13,
+            color: Colors.grey,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        bioPart(bio),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -45,22 +61,69 @@ class UserHeader extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Email: $email'),
-                  Text('Company: $company'),
-                  Text('Location: $location'),
+                  infoPartString('Email', email),
+                  infoPartString('Company', company),
+                  infoPartString('Location', location),
                 ],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Followers: $followers'),
-                  Text('Following: $following'),
-                  Text('Repos: $repos'),
-                  Text('Gists: $gists'),
+                  infoPartInt('Followers', followers),
+                  infoPartInt('Following', following),
+                  infoPartInt('Repos', repos),
+                  infoPartInt('Gists', gists),
                 ],
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget bioPart(bio) {
+    return bio == 'null'
+        ? const SizedBox.shrink()
+        : Container(
+            width: 300,
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              bio,
+              textAlign: TextAlign.center,
+            ),
+          );
+  }
+
+  Widget infoPartString(String part, String info) {
+    return info == 'null'
+        ? Row(
+            children: [
+              Text('$part: '),
+              const Text(
+                'hidden',
+                style: TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ],
+          )
+        : Row(
+            children: [
+              Text('$part: '),
+              Text(
+                info,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+            ],
+          );
+  }
+
+  Widget infoPartInt(String part, int? info) {
+    return Row(
+      children: [
+        Text('$part: '),
+        Text(
+          '$info',
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
       ],
     );
