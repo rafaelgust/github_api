@@ -7,6 +7,7 @@ import '../bloc/repos_bloc.dart';
 import '../bloc/states/repos_states.dart';
 import '../bloc/states/user_states.dart';
 import '../bloc/user_bloc.dart';
+import '../components/repo_content.dart';
 import '../components/user_header.dart';
 import '../components/user_header_loading.dart';
 
@@ -81,32 +82,37 @@ class _UserViewState extends State<UserView> {
                   );
                 }),
             const Divider(),
-            StreamBuilder(
-                stream: blocRepos.stream,
-                builder: (context, snapshot) {
-                  if (blocRepos.state is ReposInitialState) {
-                    return const Center(
-                      child: Text('initial'),
-                    );
-                  }
-                  if (blocRepos.state is ReposErrorState) {
-                    return const Center(
-                      child: Text('Error'),
-                    );
-                  }
-                  if (blocRepos.state is ReposLoadingState) {
-                    return const Center(
-                      child: Text('Load'),
-                    );
-                  }
-                  final list = (blocRepos.state as ReposSucessState).list;
-                  return ListView.builder(
-                    itemCount: list?.length,
-                    itemBuilder: (context, index) {
-                      return Text('${list?[index].name}');
-                    },
-                  );
-                }),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StreamBuilder(
+                    stream: blocRepos.stream,
+                    builder: (context, snapshot) {
+                      if (blocRepos.state is ReposInitialState) {
+                        return const Center(
+                          child: Text('initial'),
+                        );
+                      }
+                      if (blocRepos.state is ReposErrorState) {
+                        return const Center(
+                          child: Text('Error'),
+                        );
+                      }
+                      if (blocRepos.state is ReposLoadingState) {
+                        return const Center(
+                          child: Text('Load'),
+                        );
+                      }
+                      final list = (blocRepos.state as ReposSucessState).list;
+                      return ListView.builder(
+                        itemCount: list?.length,
+                        itemBuilder: (context, index) {
+                          return RepoContent(item: list![index]);
+                        },
+                      );
+                    }),
+              ),
+            ),
           ],
         ),
       ),

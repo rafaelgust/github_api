@@ -35,10 +35,10 @@ class GithubDataSourcer implements IUserDataSource {
     final result = response.data;
 
     if (response.statusCode == 200) {
-      final List<ReposResultModel> list =
-          await result.map((m) => ReposResultModel.fromJson(m)).toList();
+      final encode = json.encode(result);
+      final List<ReposResultModel> repos = reposFromJson(encode).toList();
 
-      return list;
+      return repos;
     } else {
       throw DataSourceReposError('statusCode != 200 => ${response.statusCode}');
     }
