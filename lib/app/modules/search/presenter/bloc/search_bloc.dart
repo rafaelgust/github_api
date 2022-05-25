@@ -15,6 +15,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       SearchInputEvent event, Emitter<SearchState> emit) async {
     emit(SearchLoadingState());
     final result = await usecase(event.search);
+    await Future.delayed(const Duration(seconds: 1));
     result!.fold(
       (l) => emit(SearchErrorState(l)),
       (r) => emit(SearchSucessState(r)),

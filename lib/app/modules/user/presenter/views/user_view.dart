@@ -8,6 +8,7 @@ import '../bloc/states/repos_states.dart';
 import '../bloc/states/user_states.dart';
 import '../bloc/user_bloc.dart';
 import '../components/repo_content.dart';
+import '../components/repo_content_loading.dart';
 import '../components/user_header.dart';
 import '../components/user_header_loading.dart';
 
@@ -97,9 +98,7 @@ class _UserViewState extends State<UserView> {
                       );
                     }
                     if (blocRepos.state is ReposLoadingState) {
-                      return const Center(
-                        child: Text('Load'),
-                      );
+                      return const RepoContentLoading();
                     }
                     final list = (blocRepos.state as ReposSucessState).list;
                     return ListView.builder(

@@ -14,6 +14,7 @@ class ReposListBloc extends Bloc<ReposEvents, ReposStates> {
   void _mapEventToState(GetReposEvent event, Emitter<ReposStates> emit) async {
     emit(ReposLoadingState());
     final result = await usecase(event.username);
+    await Future.delayed(const Duration(seconds: 1));
     result!.fold(
       (l) => emit(ReposErrorState(l)),
       (r) => emit(ReposSucessState(r)),

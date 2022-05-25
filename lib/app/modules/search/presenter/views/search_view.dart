@@ -67,13 +67,11 @@ class _SearchViewState extends State<SearchView> {
                   stream: bloc.stream,
                   builder: (context, snapshot) {
                     if (bloc.state is SearchInitialState) {
-                      return const Center(
-                        child: Text('Procure um usuario'),
-                      );
+                      return const SizedBox.shrink();
                     }
                     if (bloc.state is SearchErrorState) {
                       return const Center(
-                        child: Text('Campo vazio'),
+                        child: Text('Ops'),
                       );
                     }
                     if (bloc.state is SearchLoadingState) {
