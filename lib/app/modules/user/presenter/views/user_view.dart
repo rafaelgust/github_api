@@ -83,35 +83,32 @@ class _UserViewState extends State<UserView> {
                 }),
             const Divider(),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: StreamBuilder(
-                    stream: blocRepos.stream,
-                    builder: (context, snapshot) {
-                      if (blocRepos.state is ReposInitialState) {
-                        return const Center(
-                          child: Text('initial'),
-                        );
-                      }
-                      if (blocRepos.state is ReposErrorState) {
-                        return const Center(
-                          child: Text('Error'),
-                        );
-                      }
-                      if (blocRepos.state is ReposLoadingState) {
-                        return const Center(
-                          child: Text('Load'),
-                        );
-                      }
-                      final list = (blocRepos.state as ReposSucessState).list;
-                      return ListView.builder(
-                        itemCount: list?.length,
-                        itemBuilder: (context, index) {
-                          return RepoContent(item: list![index]);
-                        },
+              child: StreamBuilder(
+                  stream: blocRepos.stream,
+                  builder: (context, snapshot) {
+                    if (blocRepos.state is ReposInitialState) {
+                      return const Center(
+                        child: Text('initial'),
                       );
-                    }),
-              ),
+                    }
+                    if (blocRepos.state is ReposErrorState) {
+                      return const Center(
+                        child: Text('Error'),
+                      );
+                    }
+                    if (blocRepos.state is ReposLoadingState) {
+                      return const Center(
+                        child: Text('Load'),
+                      );
+                    }
+                    final list = (blocRepos.state as ReposSucessState).list;
+                    return ListView.builder(
+                      itemCount: list?.length,
+                      itemBuilder: (context, index) {
+                        return RepoContent(item: list![index]);
+                      },
+                    );
+                  }),
             ),
           ],
         ),

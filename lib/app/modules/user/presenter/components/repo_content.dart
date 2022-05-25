@@ -11,14 +11,19 @@ class RepoContent extends StatelessWidget {
     return Center(
       child: Container(
           width: 500,
-          height: 100,
-          color: Colors.grey,
+          decoration: const BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.all(
+              Radius.circular(10.0),
+            ),
+          ),
           padding: const EdgeInsets.all(10.0),
           margin: const EdgeInsets.all(5.0),
           child: Column(
             children: [
               Text('${item.name}'),
               Text('${item.description}'),
+              const Divider(),
             ],
           )),
     );

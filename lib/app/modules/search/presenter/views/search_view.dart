@@ -5,6 +5,8 @@ import '../../../../core/services/debounce_service.dart';
 import '../bloc/events/search_events.dart';
 import '../bloc/search_bloc.dart';
 import '../bloc/states/search_states.dart';
+import '../components/list_user.dart';
+import '../components/list_user_loading.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -26,32 +28,38 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: IconButton(
-          onPressed: () => Modular.to.pop(),
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.black,
-          ),
-        ),
-      ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
+            Container(
+              width: double.infinity,
+              height: 100,
               padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (value) => _debounce(() {
-                  bloc.add(SearchInputEvent(value));
-                }),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Search',
-                ),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () => Modular.to.pop(),
+                    icon: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) => _debounce(() {
+                        bloc.add(SearchInputEvent(value));
+                      }),
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Search',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                ],
               ),
             ),
             Expanded(
@@ -69,28 +77,18 @@ class _SearchViewState extends State<SearchView> {
                       );
                     }
                     if (bloc.state is SearchLoadingState) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
+                      return const Align(
+                        alignment: Alignment.topLeft,
+                        child: ListUserLoading(),
                       );
                     }
                     final list = (bloc.state as SearchSucessState).list;
                     return ListView.builder(
                       itemCount: list?.length,
-                      itemBuilder: ((context, index) => InkWell(
-                            onTap: () => Modular.to
-                                .pushNamed('/user/${list?[index].username}'),
-                            child: ListTile(
-                              leading: Hero(
-                                tag: 'avatar@${list?[index].username}',
-                                child: CircleAvatar(
-                                  backgroundImage:
-                                      NetworkImage('${list?[index].img}'),
-                                ),
-                              ),
-                              title: Text(
-                                  '${list?[index].username} - ${list?[index].id}'),
-                              subtitle: Text('${list?[index].url}'),
-                            ),
+                      itemBuilder: ((context, index) => ListUser(
+                            item: list![index],
+                            goUser: () => Modular.to
+                                .pushNamed('/user/${list[index].username}'),
                           )),
                     );
                   }),
