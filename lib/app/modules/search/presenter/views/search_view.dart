@@ -9,7 +9,8 @@ import '../components/list_user.dart';
 import '../components/list_user_loading.dart';
 
 class SearchView extends StatefulWidget {
-  const SearchView({super.key});
+  final String search;
+  const SearchView({super.key, required this.search});
 
   @override
   State<SearchView> createState() => _SearchViewState();
@@ -17,10 +18,19 @@ class SearchView extends StatefulWidget {
 
 class _SearchViewState extends State<SearchView> {
   final bloc = Modular.get<SearchBloc>();
+  final _searchController = TextEditingController();
   final Debounce _debounce = Debounce(const Duration(milliseconds: 800));
 
   @override
+  void initState() {
+    super.initState();
+    _searchController.text = widget.search;
+    bloc.add(SearchInputEvent(widget.search));
+  }
+
+  @override
   void dispose() {
+    _searchController.dispose();
     _debounce.dispose();
     super.dispose();
   }
@@ -49,6 +59,7 @@ class _SearchViewState extends State<SearchView> {
                   const SizedBox(width: 15),
                   Expanded(
                     child: TextField(
+                      controller: _searchController,
                       onChanged: (value) => _debounce(() {
                         bloc.add(SearchInputEvent(value));
                       }),

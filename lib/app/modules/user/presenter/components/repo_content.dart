@@ -41,7 +41,6 @@ class RepoContent extends StatelessWidget {
               ),
               Text('${item.description}'),
               const Divider(),
-              Text('${item.description}'),
               const Divider(),
               Padding(
                 padding: const EdgeInsets.all(8.0),

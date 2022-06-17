@@ -19,6 +19,11 @@ class SearchModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/', child: (context, args) => const SearchView()),
+        ChildRoute(
+          '/:search',
+          child: (context, args) => SearchView(
+            search: args.params['search'],
+          ),
+        ),
       ];
 }
