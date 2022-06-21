@@ -20,7 +20,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    bloc.add(GetListFavorites(['rafaelgust', 'flutter']));
+    bloc.add(GetListFavorites(['rafaelgust', 'flutter', 'google']));
   }
 
   @override
@@ -41,7 +41,7 @@ class _HomeViewState extends State<HomeView> {
                   builder: (context, snapshot) {
                     if (bloc.state is FavoriteIdleState) {
                       return const Center(
-                        child: Text('initial'),
+                        child: CircularProgressIndicator(),
                       );
                     }
                     if (bloc.state is FavoriteErrorState) {

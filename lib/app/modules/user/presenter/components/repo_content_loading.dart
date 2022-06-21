@@ -39,14 +39,16 @@ class _RepoContentLoadingState extends State<RepoContentLoading> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedOpacity(
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeIn,
-      opacity: opacity,
-      child: ListView.builder(
-          itemCount: 20,
-          itemBuilder: (context, index) {
-            return Center(
+    return SliverFixedExtentList(
+      itemExtent: 200.0,
+      delegate: SliverChildBuilderDelegate(
+        childCount: 20,
+        (context, index) {
+          return AnimatedOpacity(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeIn,
+            opacity: opacity,
+            child: Center(
               child: Container(
                 width: 500,
                 height: 200,
@@ -59,8 +61,10 @@ class _RepoContentLoadingState extends State<RepoContentLoading> {
                 padding: const EdgeInsets.all(10.0),
                 margin: const EdgeInsets.all(5.0),
               ),
-            );
-          }),
+            ),
+          );
+        },
+      ),
     );
   }
 }

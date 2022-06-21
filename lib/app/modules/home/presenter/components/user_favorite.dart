@@ -12,13 +12,19 @@ class UserFavorite extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 150,
+      height: 120,
       padding: const EdgeInsets.all(10.0),
       margin: const EdgeInsets.only(bottom: 10.0),
       decoration: const BoxDecoration(
-        color: Colors.grey,
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-      ),
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 3.0,
+              offset: Offset(3, 3),
+            ),
+          ]),
       child: InkWell(
         onTap: () => goToUser('${user.username}'),
         child: Row(
@@ -30,6 +36,7 @@ class UserFavorite extends StatelessWidget {
               child: Hero(
                 tag: 'avatar@${user.username}',
                 child: CircleAvatar(
+                  backgroundColor: Colors.white,
                   backgroundImage: NetworkImage('${user.img}'),
                 ),
               ),
@@ -39,9 +46,9 @@ class UserFavorite extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${user.username} - ${user.id}'),
                 Text('${user.name}'),
-                Spacer(),
+                Text('${user.username} - ${user.id}'),
+                const Spacer(),
                 Text('${user.url}'),
               ],
             ),

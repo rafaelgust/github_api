@@ -8,6 +8,7 @@ class RepoContent extends StatelessWidget {
   const RepoContent({super.key, required this.item});
 
   String formatedDateTime(String date) {
+    if (date == 'null') return '';
     DateTime dateParsed = DateTime.parse(date);
     DateFormat formatter = DateFormat('dd/MM/yyyy');
     String formatted = formatter.format(dateParsed);

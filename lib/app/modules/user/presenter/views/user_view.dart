@@ -34,80 +34,80 @@ class _UserViewState extends State<UserView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        leading: IconButton(
-          onPressed: () => Modular.to.pop(),
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.white,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: Colors.transparent,
+              expandedHeight: 430.0,
+              elevation: 0.0,
+              leading: IconButton(
+                onPressed: () => Modular.to.pop(),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.black,
+                ),
+              ),
+              flexibleSpace: FlexibleSpaceBar(
+                background: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: StreamBuilder(
+                    stream: bloc.stream,
+                    builder: (context, snapshot) {
+                      if (bloc.state is UserInitialState ||
+                          bloc.state is UserLoadingState) {
+                        return const UserHeaderLoading();
+                      }
+                      if (bloc.state is UserErrorState) {
+                        return const Center(
+                          child: Text('Error'),
+                        );
+                      }
+
+                      final user = (bloc.state as UserSucessState).data;
+                      return Center(
+                        child: UserHeader(
+                          avatar: '${user?.avatarUrl}',
+                          username: '${user?.login}',
+                          name: '${user?.name}',
+                          email: '${user?.email}',
+                          company: '${user?.company}',
+                          location: '${user?.location}',
+                          bio: '${user?.bio}',
+                          followers: user?.followers,
+                          following: user?.following,
+                          repos: user?.publicRepos,
+                          gists: user?.publicGists,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
             StreamBuilder(
-                stream: bloc.stream,
-                builder: (context, snapshot) {
-                  if (bloc.state is UserInitialState) {
-                    return const Center(
-                      child: Text('Initial'),
-                    );
-                  }
-                  if (bloc.state is UserErrorState) {
-                    return const Center(
-                      child: Text('Error'),
-                    );
-                  }
-                  if (bloc.state is UserLoadingState) {
-                    return const UserHeaderLoading();
-                  }
-                  final user = (bloc.state as UserSucessState).data;
-                  return UserHeader(
-                    avatar: '${user?.avatarUrl}',
-                    username: '${user?.login}',
-                    name: '${user?.name}',
-                    email: '${user?.email}',
-                    company: '${user?.company}',
-                    location: '${user?.location}',
-                    bio: '${user?.bio}',
-                    followers: user?.followers,
-                    following: user?.following,
-                    repos: user?.publicRepos,
-                    gists: user?.publicGists,
+              stream: blocRepos.stream,
+              builder: (context, snapshot) {
+                if (blocRepos.state is ReposInitialState ||
+                    blocRepos.state is ReposLoadingState) {
+                  return const RepoContentLoading();
+                }
+                if (blocRepos.state is ReposErrorState) {
+                  return const Center(
+                    child: Text('Error'),
                   );
-                }),
-            const Divider(),
-            Expanded(
-              child: StreamBuilder(
-                  stream: blocRepos.stream,
-                  builder: (context, snapshot) {
-                    if (blocRepos.state is ReposInitialState) {
-                      return const Center(
-                        child: Text('initial'),
-                      );
-                    }
-                    if (blocRepos.state is ReposErrorState) {
-                      return const Center(
-                        child: Text('Error'),
-                      );
-                    }
-                    if (blocRepos.state is ReposLoadingState) {
-                      return const RepoContentLoading();
-                    }
-                    final list = (blocRepos.state as ReposSucessState).list;
-                    return ListView.builder(
-                      itemCount: list?.length,
-                      itemBuilder: (context, index) {
-                        return RepoContent(item: list![index]);
-                      },
-                    );
-                  }),
+                }
+
+                final list = (blocRepos.state as ReposSucessState).list;
+
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    childCount: list?.length,
+                    (context, index) => RepoContent(item: list![index]),
+                  ),
+                );
+              },
             ),
           ],
         ),
