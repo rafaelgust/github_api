@@ -1,9 +1,12 @@
+import 'dart:convert' show utf8;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:github_api/app/modules/home/presenter/bloc/states/favorite_states.dart';
 
-import '../bloc/events/favorite_events.dart';
 import '../bloc/favorite_bloc.dart';
+import '../bloc/events/favorite_events.dart';
+import '../bloc/states/favorite_states.dart';
+
 import '../components/user_favorite.dart';
 import '../components/user_search.dart';
 
@@ -23,6 +26,13 @@ class _HomeViewState extends State<HomeView> {
     bloc.add(GetListFavorites(['rafaelgust', 'flutter', 'google']));
   }
 
+  _search(String search) {
+    var encoded = utf8.encode(search);
+    var data = String.fromCharCodes(encoded);
+    print(data);
+    Modular.to.pushNamed('/search/$search');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,15 +41,14 @@ class _HomeViewState extends State<HomeView> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              UserSearch(
-                goToSearch: (search) => Modular.to.pushNamed('/search/$search'),
-              ),
+              UserSearch(goToSearch: _search),
               const SizedBox(height: 10),
               Expanded(
                 child: StreamBuilder(
                   stream: bloc.stream,
                   builder: (context, snapshot) {
-                    if (bloc.state is FavoriteIdleState) {
+                    if (bloc.state is FavoriteIdleState ||
+                        bloc.state is FavoriteLoadingState) {
                       return const Center(
                         child: CircularProgressIndicator(),
                       );
@@ -49,11 +58,7 @@ class _HomeViewState extends State<HomeView> {
                         child: Text('Error'),
                       );
                     }
-                    if (bloc.state is FavoriteLoadingState) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
+
                     final list = (bloc.state as FavoriteSucessState).list;
 
                     return ListView.builder(

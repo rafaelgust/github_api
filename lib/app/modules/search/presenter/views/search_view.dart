@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../core/services/debounce_service.dart';
+
 import '../bloc/events/search_events.dart';
 import '../bloc/search_bloc.dart';
 import '../bloc/states/search_states.dart';
@@ -24,8 +25,8 @@ class _SearchViewState extends State<SearchView> {
   @override
   void initState() {
     super.initState();
-    _searchController.text = widget.search;
-    bloc.add(SearchInputEvent(widget.search));
+    _searchController.text = Uri.decodeFull(widget.search);
+    bloc.add(SearchInputEvent(_searchController.text));
   }
 
   @override

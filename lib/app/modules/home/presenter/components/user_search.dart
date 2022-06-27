@@ -29,7 +29,8 @@ class _UserSearchState extends State<UserSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      width: 500,
       padding: const EdgeInsets.all(8.0),
       child: Stack(
         children: [
