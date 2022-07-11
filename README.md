@@ -24,6 +24,6 @@ samples, guidance on mobile development, and a full API reference.
 - dio
 - intl
 
-![](https://github.com/rafaelgust/github_api/0.gif)
-![](https://github.com/rafaelgust/github_api/1.gif)
-![](https://github.com/rafaelgust/github_api/2.gif)
+![](https://raw.githubusercontent.com/rafaelgust/github_api/main/0.gif)
+![](https://raw.githubusercontent.com/rafaelgust/github_api/main/1.gif)
+![](https://raw.githubusercontent.com/rafaelgust/github_api/main/2.gif)
