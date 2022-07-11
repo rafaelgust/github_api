@@ -1,5 +1,3 @@
-import 'dart:convert' show utf8;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -26,12 +24,8 @@ class _HomeViewState extends State<HomeView> {
     bloc.add(GetListFavorites(['rafaelgust', 'flutter', 'google']));
   }
 
-  _search(String search) {
-    var encoded = utf8.encode(search);
-    var data = String.fromCharCodes(encoded);
-    print(data);
-    Modular.to.pushNamed('/search/$search');
-  }
+  _search(String search) => Modular.to.pushNamed('/search/$search');
+  _toFavorite(String user) => Modular.to.pushNamed('/user/$user');
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +48,7 @@ class _HomeViewState extends State<HomeView> {
                       );
                     }
                     if (bloc.state is FavoriteErrorState) {
-                      return const Center(
-                        child: Text('Error'),
-                      );
+                      return const Center(child: Text('Error'));
                     }
 
                     final list = (bloc.state as FavoriteSucessState).list;
@@ -66,8 +58,7 @@ class _HomeViewState extends State<HomeView> {
                       itemBuilder: (context, index) {
                         return UserFavorite(
                           user: list[index],
-                          goToUser: (user) =>
-                              Modular.to.pushNamed('/user/$user'),
+                          goToUser: _toFavorite,
                         );
                       },
                     );
